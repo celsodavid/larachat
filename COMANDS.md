@@ -24,3 +24,9 @@ Larachat is a web application with chat in realtime:
     - php artisan jetstream:install inertia
     - npm install && npm run dev
     - php artisan migrate
+
+## Criando Controller e Configurando e Normalizando as Rotas 
+
+- php artisan make:controller Web/PageController
+- Tirando as closures da rota e colocando no controller
+- Criando o grupo de rotas
