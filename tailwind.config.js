@@ -20,6 +20,7 @@ module.exports = {
     variants: {
         extend: {
             opacity: ['disabled'],
+            cursor: ['responsive', 'hover', 'focus'],
         },
     },
 
