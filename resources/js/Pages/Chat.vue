@@ -44,9 +44,9 @@
 
                       <!-- form -->
                       <div v-if="userActive" class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
-                          <form>
+                          <form v-on:submit.prevent="sendMessage">
                               <div class="flex rounded-md overflow-hidden border border-gray-300">
-                                  <input type="text" class="flex-1 px-4 py-2 text-sm focus:outline-none">
+                                  <input v-model="message" type="text" class="flex-1 px-4 py-2 text-sm focus:outline-none">
                                   <button type="submit" class="bg-indigo-500 bg-indigo-600 text-white px-4 py-2">Enviar</button>
                               </div>
                           </form>
@@ -74,6 +74,7 @@
                 users: [],
                 messages: [],
                 userActive: null,
+                message: '',
             }
         },
         methods: {
@@ -88,7 +89,15 @@
                   this.messages = response.data.messages
                 })
             },
-            moment: function (date) {
+            sendMessage: function () {
+                axios.post('api/messages/store', {
+                    'content': this.message,
+                    'to': this.userActive.id
+                }).then(response => {
+                    console.log(response)
+                })
+            },
+          moment: function (date) {
                 return moment(date).format('DD/MM/YYYY HH:mm')
             }
         },
