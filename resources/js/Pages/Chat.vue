@@ -30,18 +30,14 @@
                       <div class="flex flex-col w-full p-6 overflow-y-auto">
                           <div
                               v-for="message in messages" :key="message.id"
-                              class="w-full mb-3 text-right">
-                              <p class="inline-block p-2 rounded-md bg-indigo-300 bg-opacity-25" style="max-width: 75%">
+                              :class="(message.from === $page.props.auth.user.id) ? 'text-right' : ''"
+                              class="w-full mb-3">
+                              <p
+                                  :class="(message.from === $page.props.auth.user.id) ? 'bg-indigo-300 bg-opacity-25' : 'bg-gray-300 bg-opacity-25'"
+                                  class="inline-block p-2 rounded-md" style="max-width: 75%">
                                   {{ message.content }}
                               </p>
                               <span class="block mt-1 text-xs text-gray-500">{{ message.created_at }}</span>
-                          </div>
-
-                          <div class="w-full mb-3">
-                              <p class="inline-block p-2 rounded-md bg-gray-300 bg-opacity-25" style="max-width: 75%">
-                                  Oi!
-                              </p>
-                              <span class="block mt-1 text-xs text-gray-500">13/04/2021 21:28</span>
                           </div>
                       </div>
 
