@@ -32,7 +32,7 @@
                           <div
                               v-for="message in messages" :key="message.id"
                               :class="(message.from === $page.props.auth.user.id) ? 'text-right' : ''"
-                              class="w-full mb-3">
+                              class="w-full mb-3 message">
                               <p
                                   :class="(message.from === $page.props.auth.user.id) ? 'bg-indigo-300 bg-opacity-25' : 'bg-gray-300 bg-opacity-25'"
                                   class="inline-block p-2 rounded-md" style="max-width: 75%">
@@ -78,24 +78,41 @@
             }
         },
         methods: {
-            loadMessages: function (userId) {
+            scrollToButtom: function () {
+                if (this.messages.length) {
+                    document.querySelectorAll('.message:last-child')[0].scrollIntoView()
+                }
+            },
+            loadMessages: async function (userId) {
                 // user active
                 axios.get(`api/users/${userId}`).then(response => {
                     this.userActive = response.data.user
                 })
 
                 // get messages by user
-                axios.get(`api/messages/${userId}`).then(response => {
+                await axios.get(`api/messages/${userId}`).then(response => {
                   this.messages = response.data.messages
                 })
+
+                this.scrollToButtom()
             },
-            sendMessage: function () {
-                axios.post('api/messages/store', {
+            sendMessage: async function () {
+                await axios.post('api/messages/store', {
                     'content': this.message,
                     'to': this.userActive.id
                 }).then(response => {
-                    console.log(response)
+                    this.messages.push({
+                        'from': '1',
+                        'to': this.userActive.id,
+                        'content': this.message,
+                        'created_at': new Date().toISOString(),
+                        'updated_at': new Date().toISOString(),
+                    })
+
+                    this.message = ''
                 })
+
+                this.scrollToButtom()
             },
           moment: function (date) {
                 return moment(date).format('DD/MM/YYYY HH:mm')
