@@ -15,6 +15,7 @@
                           <li
                               v-for="user in users" :key="user.id"
                               @click="() => {loadMessages(user.id)}"
+                              :class="(userActive && userActive.id == user.id) ? 'bg-gray-200 bg-opacity-50' : ''"
                               class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                               <p class="flex items-center">
                                 {{ user.name }}
@@ -38,7 +39,6 @@
                                   {{ message.content }}
                               </p>
                               <span class="block mt-1 text-xs text-gray-500">{{ moment(message.created_at) }}</span>
-<!--                              <span class="block mt-1 text-xs text-gray-500">{{ message.created_at | moment }}</span>-->
                           </div>
                       </div>
 
@@ -72,22 +72,28 @@
         data() {
             return {
                 users: [],
-                messages: []
+                messages: [],
+                userActive: {},
             }
         },
         methods: {
             loadMessages: function (userId) {
+                // user active
+                axios.get(`api/users/${userId}`).then(response => {
+                    this.userActive = response.data.user
+                })
+
+                // get messages by user
                 axios.get(`api/messages/${userId}`).then(response => {
                   this.messages = response.data.messages
-                  console.log(response)
                 })
-                console.log(userId)
             },
             moment: function (date) {
                 return moment(date).format('DD/MM/YYYY HH:mm')
             }
         },
         mounted() {
+            // get users an minus user logged
             axios.get('api/users').then(response => {
                 this.users = response.data.users
             })

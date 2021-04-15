@@ -17917,18 +17917,22 @@ moment__WEBPACK_IMPORTED_MODULE_1___default().locale('pt-br');
   data: function data() {
     return {
       users: [],
-      messages: []
+      messages: [],
+      userActive: {}
     };
   },
   methods: {
     loadMessages: function loadMessages(userId) {
       var _this = this;
 
+      // user active
+      axios.get("api/users/".concat(userId)).then(function (response) {
+        _this.userActive = response.data.user;
+      }); // get messages by user
+
       axios.get("api/messages/".concat(userId)).then(function (response) {
         _this.messages = response.data.messages;
-        console.log(response);
       });
-      console.log(userId);
     },
     moment: function moment(date) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('DD/MM/YYYY HH:mm');
@@ -17937,6 +17941,7 @@ moment__WEBPACK_IMPORTED_MODULE_1___default().locale('pt-br');
   mounted: function mounted() {
     var _this2 = this;
 
+    // get users an minus user logged
     axios.get('api/users').then(function (response) {
       _this2.users = response.data.users;
     });
@@ -21803,11 +21808,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: function onClick() {
             $options.loadMessages(user.id);
           },
-          "class": "p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer"
+          "class": [$data.userActive && $data.userActive.id == user.id ? 'bg-gray-200 bg-opacity-50' : '', "p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer"]
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name) + " ", 1
         /* TEXT */
-        ), _hoisted_7])], 8
-        /* PROPS */
+        ), _hoisted_7])], 10
+        /* CLASS, PROPS */
         , ["onClick"]);
       }), 128
       /* KEYED_FRAGMENT */
@@ -21824,7 +21829,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* TEXT, CLASS */
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.moment(message.created_at)), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                              <span class=\"block mt-1 text-xs text-gray-500\">{{ message.created_at | moment }}</span>")], 2
+        )], 2
         /* CLASS */
         );
       }), 128
