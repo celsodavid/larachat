@@ -37,3 +37,8 @@ Larachat is a web application with chat in realtime:
 - Para o `cursor: pointer` funcionar deve-se add no arquivo tailwind.config.js na seção `variants->extends` as diretivas
 para habilitar o cursor
 - Para que as alterações surtam efeito em tempo de alteração deixar executando a diretiva `npm run watch`
+
+## Moment JS
+- Documentação [MomentJS](https://momentjs.com/)
+- [Instalação]: `npm install moment --save`
+
