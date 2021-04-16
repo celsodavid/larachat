@@ -61,6 +61,7 @@
 <script>
     import AppLayout from '@/Layouts/AppLayout'
     import moment from 'moment'
+    // import store from "../store"; // comentado para fazer de acordo com diretivas do vue 3
 
     moment.locale('pt-br');
 
@@ -75,8 +76,15 @@
                 messages: [],
                 userActive: null,
                 message: '',
+                userLogged: '',
             }
         },
+        // comentado para fazer de acordo com diretivas do vue 3
+        // computed: {
+        //     user() {
+        //         return store.state.user
+        //     }
+        // },
         methods: {
             scrollToButtom: function () {
                 if (this.messages.length) {
@@ -102,7 +110,7 @@
                     'to': this.userActive.id
                 }).then(response => {
                     this.messages.push({
-                        'from': '1',
+                        'from': this.userLogged.id, // this.user.id [comentado para fazer de acordo com diretivas do vue 3]
                         'to': this.userActive.id,
                         'content': this.message,
                         'created_at': new Date().toISOString(),
@@ -122,6 +130,11 @@
             // get users an minus user logged
             axios.get('api/users').then(response => {
                 this.users = response.data.users
+            }),
+
+            // pegando o id do usuário (refatorar da maneira correta de acordo com a versão do vue 3)
+            axios.get('api/user/me').then(response => {
+                this.userLogged = response.data.user
             })
         },
     }
