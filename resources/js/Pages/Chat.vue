@@ -19,7 +19,7 @@
                               class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                               <p class="flex items-center">
                                 {{ user.name }}
-                                <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
+                                <span v-if="user.notification" class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
                               </p>
                           </li>
                       </ul>
@@ -102,6 +102,16 @@
                   this.messages = response.data.messages
                 })
 
+                const user = this.users.filter((user) => {
+                    if (user.id === userId) {
+                        return user
+                    }
+                })
+
+                if (user) {
+                    AppLayout.set(user[0], 'notification', true)
+                }
+
                 this.scrollToButtom()
             },
             sendMessage: async function () {
@@ -143,7 +153,15 @@
                     await this.messages.push(e)
                     this.scrollToButtom()
                 } else {
+                    const user = this.users.filter((user) => {
+                        if (user.id === e.message.from) {
+                            return user
+                        }
+                    })
 
+                    if (user) {
+                        AppLayout.set(user[0], 'notification', true)
+                    }
                 }
             })
         },

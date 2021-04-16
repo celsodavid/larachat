@@ -65,7 +65,7 @@ class MessageController extends Controller
         $message = new Message();
         $message->from = Auth::user()->id;
         $message->to = $request->to;
-        $message->content = filter_var($request->content, FILTER_SANITIZE_STRIPPED);
+        $message->content = filter_var($request->get('content'), FILTER_SANITIZE_STRIPPED);
         $message->save();
 
         Event::dispatch(new SendMessage($message, $request->to));

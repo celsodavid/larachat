@@ -17958,6 +17958,7 @@ moment__WEBPACK_IMPORTED_MODULE_2___default().locale('pt-br');
       var _loadMessages = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(userId) {
         var _this = this;
 
+        var user;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -17973,9 +17974,19 @@ moment__WEBPACK_IMPORTED_MODULE_2___default().locale('pt-br');
                 });
 
               case 3:
+                user = this.users.filter(function (user) {
+                  if (user.id === userId) {
+                    return user;
+                  }
+                });
+
+                if (user) {
+                  _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_1__.default.set(user[0], 'notification', true);
+                }
+
                 this.scrollToButtom();
 
-              case 4:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -18047,6 +18058,7 @@ moment__WEBPACK_IMPORTED_MODULE_2___default().locale('pt-br');
     }), // connect of channel for user logged
     Echo["private"]("user.".concat(this.users.id)).listen('.SendMessage', /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e) {
+        var user;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -18062,10 +18074,21 @@ moment__WEBPACK_IMPORTED_MODULE_2___default().locale('pt-br');
               case 3:
                 _this3.scrollToButtom();
 
-                _context3.next = 6;
+                _context3.next = 8;
                 break;
 
               case 6:
+                user = _this3.users.filter(function (user) {
+                  if (user.id === e.message.from) {
+                    return user;
+                  }
+                });
+
+                if (user) {
+                  _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_1__.default.set(user[0], 'notification', true);
+                }
+
+              case 8:
               case "end":
                 return _context3.stop();
             }
@@ -21909,13 +21932,10 @@ var _hoisted_5 = {
 var _hoisted_6 = {
   "class": "flex items-center"
 };
-
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
+var _hoisted_7 = {
+  key: 0,
   "class": "ml-2 w-2 h-2 bg-blue-500 rounded-full"
-}, null, -1
-/* HOISTED */
-);
-
+};
 var _hoisted_8 = {
   "class": "w-9/12 flex flex-col justify-between"
 };
@@ -21957,7 +21977,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "class": [$data.userActive && $data.userActive.id == user.id ? 'bg-gray-200 bg-opacity-50' : '', "p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer"]
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name) + " ", 1
         /* TEXT */
-        ), _hoisted_7])], 10
+        ), user.notification ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("span", _hoisted_7)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 10
         /* CLASS, PROPS */
         , ["onClick"]);
       }), 128
