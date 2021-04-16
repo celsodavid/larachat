@@ -135,6 +135,16 @@
             // pegando o id do usuário (refatorar da maneira correta de acordo com a versão do vue 3)
             axios.get('api/user/me').then(response => {
                 this.userLogged = response.data.user
+            }),
+
+            // connect of channel for user logged
+            Echo.private(`user.${this.users.id}`).listen('.SendMessage', async (e) => {
+                if (this.userActive && this.userActive.id === e.message.from) {
+                    await this.messages.push(e)
+                    this.scrollToButtom()
+                } else {
+
+                }
             })
         },
     }

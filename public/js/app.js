@@ -18044,7 +18044,39 @@ moment__WEBPACK_IMPORTED_MODULE_2___default().locale('pt-br');
     }), // pegando o id do usuário (refatorar da maneira correta de acordo com a versão do vue 3)
     axios.get('api/user/me').then(function (response) {
       _this3.userLogged = response.data.user;
-    });
+    }), // connect of channel for user logged
+    Echo["private"]("user.".concat(this.users.id)).listen('.SendMessage', /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!(_this3.userActive && _this3.userActive.id === e.message.from)) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                _context3.next = 3;
+                return _this3.messages.push(e);
+
+              case 3:
+                _this3.scrollToButtom();
+
+                _context3.next = 6;
+                break;
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      return function (_x2) {
+        return _ref.apply(this, arguments);
+      };
+    }());
   }
 });
 
