@@ -19,7 +19,7 @@
                               class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                               <p class="flex items-center">
                                 {{ user.name }}
-                                <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
+                                <span v-if="user.notification" class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
                               </p>
                           </li>
                       </ul>
@@ -61,6 +61,7 @@
 <script>
     import AppLayout from '@/Layouts/AppLayout'
     import moment from 'moment'
+    // import store from "../store"; // comentado para fazer de acordo com diretivas do vue 3
 
     moment.locale('pt-br');
 
@@ -75,8 +76,15 @@
                 messages: [],
                 userActive: null,
                 message: '',
+                userLogged: '',
             }
         },
+        // comentado para fazer de acordo com diretivas do vue 3
+        // computed: {
+        //     user() {
+        //         return store.state.user
+        //     }
+        // },
         methods: {
             scrollToButtom: function () {
                 if (this.messages.length) {
@@ -94,6 +102,16 @@
                   this.messages = response.data.messages
                 })
 
+                const user = this.users.filter((user) => {
+                    if (user.id === userId) {
+                        return user
+                    }
+                })
+
+                if (user) {
+                    AppLayout.set(user[0], 'notification', true)
+                }
+
                 this.scrollToButtom()
             },
             sendMessage: async function () {
@@ -102,7 +120,7 @@
                     'to': this.userActive.id
                 }).then(response => {
                     this.messages.push({
-                        'from': '1',
+                        'from': this.userLogged.id, // this.user.id [comentado para fazer de acordo com diretivas do vue 3]
                         'to': this.userActive.id,
                         'content': this.message,
                         'created_at': new Date().toISOString(),
@@ -122,6 +140,29 @@
             // get users an minus user logged
             axios.get('api/users').then(response => {
                 this.users = response.data.users
+            }),
+
+            // pegando o id do usuário (refatorar da maneira correta de acordo com a versão do vue 3)
+            axios.get('api/user/me').then(response => {
+                this.userLogged = response.data.user
+            }),
+
+            // connect of channel for user logged
+            Echo.private(`user.${this.users.id}`).listen('.SendMessage', async (e) => {
+                if (this.userActive && this.userActive.id === e.message.from) {
+                    await this.messages.push(e)
+                    this.scrollToButtom()
+                } else {
+                    const user = this.users.filter((user) => {
+                        if (user.id === e.message.from) {
+                            return user
+                        }
+                    })
+
+                    if (user) {
+                        AppLayout.set(user[0], 'notification', true)
+                    }
+                }
             })
         },
     }
