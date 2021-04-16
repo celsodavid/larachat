@@ -32,6 +32,17 @@ Larachat is a web application with chat in realtime:
 - Tirando as closures da rota e colocando no controller
 - Criando o grupo de rotas
 
+## Laravel WebSockets
+
+- `composer require beyondcode/laravel-websockets`
+- `php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="migrations"`
+- `php artisan migrate`
+- `php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"`
+- Configurar o Pusher e o Websockets no laravel 
+- [Laravel Echo](https://laravel.com/docs/8.x/broadcasting#receiving-broadcasts)
+  - `npm install --save-dev laravel-echo pusher-js`
+
+
 ## TailwindCss and Vue
 
 - Para o `cursor: pointer` funcionar deve-se add no arquivo tailwind.config.js na seção `variants->extends` as diretivas
